@@ -1,0 +1,38 @@
+﻿<style>
+    .item {
+        margin-top: 10px;
+    }
+
+    .commentInput {
+        min-height: 60px;
+        vertical-align: top;
+        padding: 1px;
+        vertical-align: text-top;
+    }
+
+    .form {
+        margin-left: 20px;
+        margin-top: 20px;
+        min-width: 1000px;
+    }
+
+    .submit {
+        margin-top: 10px;
+    }
+</style>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="form-horizontal form">
+        @using (Html.BeginForm("CreateComment", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row item">
+                <input type="text" name="content" class="col-lg-10 col-md-10 col-xs-12 commentInput" />
+                <input type="hidden" name="postId" value="@ViewData["postId"]" /><br />
+                <div class="col-lg-12 col-md-12">
+                    <input type='submit' value='Add Comment' class="btn-default submit" />
+                </div>
+            </div>
+        }
+    </div>
+}

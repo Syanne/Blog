@@ -1,0 +1,64 @@
+﻿@model Blog.Models.PostViewModel
+<style type="text/css">
+    .inputTextField {
+        width: 100%;
+        min-height: 40px;
+    }
+
+    .item {
+        margin-bottom: 20px;
+    }
+
+    .username {
+        font: 12px;
+        color: darkgray;
+    }
+
+    .comments {
+        margin-left: 10px;
+    }
+
+    .comment {
+        margin-bottom: 11px;
+        margin: 0px;
+        padding: 0px;
+    }
+</style>
+
+
+<h3>@Model.Title</h3>
+
+@Html.AntiForgeryToken()
+<div class="row">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PostId)
+
+    <div class="row item">
+        <div class="col-md-10">
+            @Html.DisplayTextFor(model => model.Content)
+        </div>
+
+        @if (User.IsInRole("Administrator"))
+            {
+                Html.ActionLink("Edit", "CreateOrUpdatePost", "Blog", new { postId = Model.PostId });
+            }
+    </div>
+
+    <div class="row comments">
+        <h5 ><b>Comments</b></h5>
+        @foreach (var comment in Model.Comments)
+            {
+            <div class="col-md-10 comment">
+                <h6 class="username">@comment.UserName</h6>
+                <h5>@comment.Content</h5>
+                @if (User.IsInRole("Administrator"))
+                {
+                    @Html.ActionLink("Block", "BlockComment", new { commentId = comment.CommentId });
+                }
+            </div>
+        }
+
+    </div>
+    @Html.Partial("Comment", new Blog.Models.CommentViewModel(), new ViewDataDictionary { { "postId", Model.PostId } })
+</div>
